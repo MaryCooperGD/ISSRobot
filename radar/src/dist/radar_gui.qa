@@ -1,0 +1,36 @@
+/* 
+ * ==============================================================
+ * radar_gui.qa
+ * ==============================================================
+ */   
+System radar_gui     
+Event sonar : p( Distance, Angle  ) 
+Event obstacle       : obstacle(X)   //from WebGUI red button X= near or from actor GUI
+Event control        : control( CMD )	//CMD = stop | atpos | go | ready
+Event usercmd        : usercmd(X)    //from robot-part of WebGUI;  X=robotgui(CMD) CMD=s(low)
+
+Dispatch polar    : p( Distance, Angle  )    
+
+Context  ctxRadarTfCe16    ip [ host="192.168.251.1"  port=8033 ] -g cyan -httpserver //192.168.251.1    
+/*
+ * WARNING: we cannot transform any event into a message
+ */
+EventHandler evh for sonar -print  {  //event => dispatch
+	forwardEvent radar_gui -m polar  
+	//forwardEvent controltfce16 -m polar
+};  
+
+QActor radar_gui context ctxRadarTfCe16  {	  	/*( R2 )*/  
+	Plan init normal        
+		println("RADAR init the GUI ... ") ;     
+		actorOp activateGui ;
+		switchToPlan doWorkMsgs      
+	Plan doWorkMsgs 
+ 		println("RADAR receive") ;                      
+		receiveMsg time ( 30000000 )  ; 
+		//printCurrentMessage ;
+   		onMsg polar : p(DIST,THETA) -> actorOp sendDataToGui( DIST,THETA ) ;  
+ 		repeatPlan  
+ }
+
+
