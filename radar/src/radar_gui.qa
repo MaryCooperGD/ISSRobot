@@ -4,21 +4,23 @@
  * ==============================================================
  */   
 System radar_gui     
-Event sonar : p( Distance, Angle  ) 
+Event sonar : p( Distance, Angle, Num  ) 
 Event obstacle       : obstacle(X)   //from WebGUI red button X= near or from actor GUI
 Event control        : control( CMD )	//CMD = stop | atpos | go | ready
 Event usercmd        : usercmd(X)    //from robot-part of WebGUI;  X=robotgui(CMD) CMD=s(low)
 
-Dispatch polar    : p( Distance, Angle  )    
+Dispatch polar    : p( Distance, Angle, Num  )    
 
-Context  ctxRadarTfCe16    ip [ host="192.168.251.1"  port=8033 ] -g cyan -httpserver //192.168.251.1    
-/*
- * WARNING: we cannot transform any event into a message
- */
+Context  ctxRadarTfCe16    ip [ host="localhost"  port=8033 ] //-standalone //192.168.251.1  
 EventHandler evh for sonar -print  {  //event => dispatch
-	forwardEvent radar_gui -m polar  
+	forwardEvent radar_gui -m polar
 	//forwardEvent controltfce16 -m polar
 };  
+Context  ctxControllerTfCe16 ip [host="localhost" port=8034] -standalone 
+EventHandler evh for sonar -print  {  //event => dispatch
+	forwardEvent radar_gui -m polar
+	//forwardEvent controltfce16 -m polar
+};
 
 QActor radar_gui context ctxRadarTfCe16  {	  	/*( R2 )*/  
 	Plan init normal        
@@ -28,9 +30,21 @@ QActor radar_gui context ctxRadarTfCe16  {	  	/*( R2 )*/
 	Plan doWorkMsgs 
  		println("RADAR receive") ;                      
 		receiveMsg time ( 30000000 )  ; 
-		//printCurrentMessage ;
-   		onMsg polar : p(DIST,THETA) -> actorOp sendDataToGui( DIST,THETA ) ;  
+		printCurrentMessage ;
+		onMsg polar : p(DIST,THETA,Num) -> actorOp sendDataToGui( DIST,THETA ) ;  
+		//sense time(30000000) sonar->continue;
+		//onEvent sonar: p(DIST,THETA,Num) -> actorOp sendDataToGui( DIST,THETA ) ; 
  		repeatPlan  
  }
 
-
+QActor controller context ctxControllerTfCe16 /*ctxRadarTfCe16*/{
+	Plan init normal
+		println("Controller init ...");
+		switchToPlan tmp
+		
+	Plan tmp
+		sense time(30000000) sonar->continue;
+		println("PROVA");
+		//onEvent sonar: p(DIST,THETA,Num) -> forward radar_gui -m polar:p(DIST,THETA,Num);
+		repeatPlan
+}

@@ -95,11 +95,12 @@ public abstract class AbstractRadar_gui extends QActor {
 	    					//addRule("tout(receive,"+getName()+")");
 	    				//} 		 
 	    				//println(getName() + " received " + aar.getResult() );
+	    		printCurrentMessage(false);
 	    		//onMsg
 	    		if( currentMessage.msgId().equals("polar") ){
 	    			String parg = "actorOp(sendDataToGui(DIST,THETA))";
 	    			/* ActorOp */
-	    			parg =  updateVars( Term.createTerm("p(Distance,Angle)"), Term.createTerm("p(DIST,THETA)"), 
+	    			parg =  updateVars( Term.createTerm("p(Distance,Angle,Num)"), Term.createTerm("p(DIST,THETA,Num)"), 
 	    				    		  					Term.createTerm(currentMessage.msgContent()), parg);
 	    			if( parg != null ){
 	    				aar = solveGoalReactive(parg,3600000,"","");

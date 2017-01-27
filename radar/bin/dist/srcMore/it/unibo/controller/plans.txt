@@ -1,0 +1,6 @@
+plan(1,init, sentence(true,move(print,"Controller init ..."),'','' ))
+plan(2,init, sentence(true,move( switchplan(tmp) ),'','' ))
+plan(1,tmp, sentence(true,senseEvent([sonar],[continue],'','' ))
+plan(2,tmp, sentence(true,move(print,"PROVA"),'','' ))
+plan(3,tmp, sentence(true,move(repeatplan) ,'','' ))
+plan(4,tmp, sentence(true,move(resumeplan),'','' ))

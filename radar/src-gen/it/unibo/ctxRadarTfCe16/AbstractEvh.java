@@ -23,7 +23,7 @@ showMsg( event.getPrologRep()  );
 //showMsg( "---------------------------------------------------------------------" );	
 		{
 		Term msgt       = Term.createTerm(event.getMsg());
-		Term msgPattern = Term.createTerm("p(Distance,Angle)");
+		Term msgPattern = Term.createTerm("p(Distance,Angle,Num)");
 				boolean b = this.pengine.unify(msgt, msgPattern);
 				if( b ) {
 			  		sendMsg("polar","radar_gui", QActorContext.dispatch, msgt.toString() ); 

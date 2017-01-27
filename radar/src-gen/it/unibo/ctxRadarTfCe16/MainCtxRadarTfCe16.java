@@ -8,11 +8,7 @@ public class MainCtxRadarTfCe16  {
 //MAIN
 public static QActorContext initTheContext() throws Exception{
 	IOutputEnvView outEnvView = SituatedSysKb.standardOutEnvView;
-	it.unibo.is.interfaces.IBasicEnvAwt env=new it.unibo.baseEnv.basicFrame.EnvFrame( 
-		"Env_ctxRadarTfCe16",java.awt.Color.cyan , java.awt.Color.black );
-	env.init();
-	outEnvView = env.getOutputEnvView();
-	String webDir = "./srcMore/it/unibo/ctxRadarTfCe16";
+	String webDir = null;
 	return QActorContext.initQActorSystem(
 		"ctxradartfce16", "./srcMore/it/unibo/ctxRadarTfCe16/radar_gui.pl", 
 		"./srcMore/it/unibo/ctxRadarTfCe16/sysRules.pl", outEnvView,webDir,false);
