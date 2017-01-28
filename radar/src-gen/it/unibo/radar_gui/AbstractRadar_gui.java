@@ -100,7 +100,7 @@ public abstract class AbstractRadar_gui extends QActor {
 	    		if( currentMessage.msgId().equals("polar") ){
 	    			String parg = "actorOp(sendDataToGui(DIST,THETA))";
 	    			/* ActorOp */
-	    			parg =  updateVars( Term.createTerm("p(Distance,Angle,Num)"), Term.createTerm("p(DIST,THETA,Num)"), 
+	    			parg =  updateVars( Term.createTerm("p(Distance,Angle,Num)"), Term.createTerm("p(DIST,THETA,NUM)"), 
 	    				    		  					Term.createTerm(currentMessage.msgContent()), parg);
 	    			if( parg != null ){
 	    				aar = solveGoalReactive(parg,3600000,"","");
